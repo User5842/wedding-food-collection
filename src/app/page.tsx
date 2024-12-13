@@ -1,6 +1,18 @@
-import Image from "next/image";
+import { PrismaClient } from "@prisma/client";
 
-export default function Home() {
+import guests from "@/data/guests.json";
+import { Guest } from "./interfaces/Guest.interface";
+
+const typedGuests: Guest[] = guests;
+
+const prisma = new PrismaClient();
+
+export default async function Home() {
+  // const guests = await prisma.guest.findMany();
+  // console.log(guests);
+
+  await prisma.guest.createMany({ data: typedGuests });
+
   return (
     <main className="container mx-auto max-w-prose">
       <header>

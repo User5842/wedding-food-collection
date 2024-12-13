@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guest {
+  id            Int     @id @default(autoincrement())
+  allergies     String? @db.VarChar(255)
+  child         Boolean @default(false)
+  familyId      Int
+  firstName     String  @db.VarChar(255)
+  foodSelection String  @db.VarChar(255)
+  lastName     String  @db.VarChar(255)
+  memberId      Int
+  needsHighChair Boolean @default(false)
+}
+
+model Family {
+  id            Int     @id @default(autoincrement())
+  familyId      Int     @default(autoincrement())
+  familyName    String  @db.VarChar(255)
+}
