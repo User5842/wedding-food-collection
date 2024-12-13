@@ -1,6 +1,6 @@
 export interface Guest {
   readonly id: number;
-  readonly allergies: string;
+  readonly allergies?: string;
   readonly child: boolean;
   readonly familyId: number;
   readonly firstName: string;
