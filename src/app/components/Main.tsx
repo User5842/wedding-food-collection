@@ -43,6 +43,11 @@ export default function Main({ guests, families }: MainProps) {
       <section className="space-y-8">
         <GuestSelection guests={guests} onGuestSelection={onGuestSelection} />
         <h2 className="text-2xl font-semibold">{guestFamily?.familyName}</h2>
+        <p className="italic">
+          Both options come with a delicious Caesar salad, fresh asparagus, and
+          creamy potatoes au gratin to perfectly complement your meal. Enjoy a
+          savory and satisfying dining experience!
+        </p>
         {guestFamilyMembers.length > 0 && (
           <GuestForm guests={guestFamilyMembers} />
         )}

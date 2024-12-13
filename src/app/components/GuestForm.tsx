@@ -6,6 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,59 +23,63 @@ const guestSchema = z.object({
   child: z.boolean(),
   familyId: z.number(),
   firstName: z.string(),
-  foodSelection: z.string(),
+  foodSelection: z.string().nonempty("Food selection is required"),
   lastName: z.string(),
   memberId: z.number(),
   needsHighChair: z.boolean(),
 });
 
-// const familySchema = z.object({
-//   id: z.number(),
-//   familyName: z.string(),
-//   familyId: z.number(),
-// });
+const guestFoodFormSchema = z.object({
+  guests: z.array(guestSchema),
+});
 
 interface GuestFormProps {
   guests: Guest[];
 }
 
 export default function GuestForm({ guests }: GuestFormProps) {
-  const form = useForm<z.infer<typeof guestSchema>>({
+  const form = useForm<z.infer<typeof guestFoodFormSchema>>({
     defaultValues: {
-      id: 0,
-      allergies: "",
-      child: false,
-      familyId: 0,
-      firstName: "",
-      foodSelection: "",
-      lastName: "",
-      memberId: 0,
-      needsHighChair: false,
+      guests: guests.map(() => ({
+        id: 0,
+        allergies: "",
+        child: false,
+        familyId: 0,
+        firstName: "",
+        foodSelection: "",
+        lastName: "",
+        memberId: 0,
+        needsHighChair: false,
+      })),
     },
-    resolver: zodResolver(guestSchema),
+    resolver: zodResolver(guestFoodFormSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof guestSchema>) => {
+  const onSubmit = (values: z.infer<typeof guestFoodFormSchema>) => {
     console.log(values);
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {guests.map((guest) => {
+        {guests.map((guest, index) => {
           const adultGuestFormItems = (
             <>
               <FormItem className="flex items-center space-x-3 space-y-0">
                 <FormControl>
                   <RadioGroupItem value="chicken" />
                 </FormControl>
-                <FormLabel className="font-normal">Chicken</FormLabel>
+                <FormLabel className="font-normal">
+                  🍗 Lemon pepper chicken
+                </FormLabel>
               </FormItem>
               <FormItem className="flex items-center space-x-3 space-y-0">
                 <FormControl>
                   <RadioGroupItem value="steak" />
                 </FormControl>
-                <FormLabel className="font-normal">Steak</FormLabel>
+                <FormLabel className="font-normal">
+                  🥩 Churrasco Steak (cooked medium)
+                </FormLabel>
               </FormItem>
             </>
           );
@@ -86,7 +91,7 @@ export default function GuestForm({ guests }: GuestFormProps) {
                   <RadioGroupItem value="cheesburger" />
                 </FormControl>
                 <FormLabel className="font-normal">
-                  Cheeseburger with fries
+                  🍔 Cheeseburger sliders with fries (kids menu)
                 </FormLabel>
               </FormItem>
               <FormItem className="flex items-center space-x-3 space-y-0">
@@ -94,7 +99,7 @@ export default function GuestForm({ guests }: GuestFormProps) {
                   <RadioGroupItem value="byom" />
                 </FormControl>
                 <FormLabel className="font-normal">
-                  Bring your own meal
+                  🍴 Bring my own meal
                 </FormLabel>
               </FormItem>
             </>
@@ -108,7 +113,7 @@ export default function GuestForm({ guests }: GuestFormProps) {
             <div className="space-y-4" key={`${guest.familyId}.${guest.id}`}>
               <FormField
                 control={form.control}
-                name="foodSelection"
+                name={`guests.${index}.foodSelection`}
                 render={({ field }) => (
                   <FormItem className="space-y-3 text-left">
                     <FormLabel className="text-xl">
@@ -133,12 +138,13 @@ export default function GuestForm({ guests }: GuestFormProps) {
                         )}
                       </RadioGroup>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               ></FormField>
               <FormField
                 control={form.control}
-                name="allergies"
+                name={`guests.${index}.allergies`}
                 render={({ field }) => (
                   <FormItem className="space-y-3 text-left">
                     <FormLabel className="font-normal">
