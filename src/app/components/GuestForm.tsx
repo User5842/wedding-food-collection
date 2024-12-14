@@ -40,16 +40,10 @@ interface GuestFormProps {
 export default function GuestForm({ guests }: GuestFormProps) {
   const form = useForm<z.infer<typeof guestFoodFormSchema>>({
     defaultValues: {
-      guests: guests.map(() => ({
-        id: 0,
+      guests: guests.map((guest) => ({
+        ...guest,
         allergies: "",
-        child: false,
-        familyId: 0,
-        firstName: "",
         foodSelection: "",
-        lastName: "",
-        memberId: 0,
-        needsHighChair: false,
       })),
     },
     resolver: zodResolver(guestFoodFormSchema),
