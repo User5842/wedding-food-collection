@@ -1,14 +1,19 @@
-import { PrismaClient } from "@prisma/client";
-
 import Main from "./components/Main";
-import { Guest } from "./interfaces/Guest.interface";
+import prisma from "./lib/db";
 import { Family } from "./interfaces/Family.interface";
-
-const prisma = new PrismaClient();
+import { Guest } from "./interfaces/Guest.interface";
 
 export default async function Home() {
+  // await prisma.family.createMany({ data: families });
+  // await prisma.guest.createMany({ data: guests });
+
+  // await prisma.guest.deleteMany();
+  // await prisma.family.deleteMany();
+
   const families = (await prisma.family.findMany()) as Family[];
-  const guests = (await prisma.guest.findMany()) as Guest[];
+  const guests = (await prisma.guest.findMany({
+    where: { family: { responseRecorded: false } },
+  })) as Guest[];
 
   return <Main families={families} guests={guests} />;
 }

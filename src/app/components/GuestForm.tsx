@@ -16,6 +16,9 @@ import { Guest } from "../interfaces/Guest.interface";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Family } from "../interfaces/Family.interface";
+import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const guestSchema = z.object({
   id: z.number(),
@@ -25,7 +28,6 @@ const guestSchema = z.object({
   firstName: z.string(),
   foodSelection: z.string().nonempty("Food selection is required"),
   lastName: z.string(),
-  memberId: z.number(),
   needsHighChair: z.boolean(),
 });
 
@@ -35,9 +37,12 @@ const guestFoodFormSchema = z.object({
 
 interface GuestFormProps {
   guests: Guest[];
+  family: Family | null;
 }
 
-export default function GuestForm({ guests }: GuestFormProps) {
+export default function GuestForm({ guests, family }: GuestFormProps) {
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof guestFoodFormSchema>>({
     defaultValues: {
       guests: guests.map((guest) => ({
@@ -49,8 +54,32 @@ export default function GuestForm({ guests }: GuestFormProps) {
     resolver: zodResolver(guestFoodFormSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof guestFoodFormSchema>) => {
-    console.log(values);
+  const onSubmit = async (guests: z.infer<typeof guestFoodFormSchema>) => {
+    const response = await fetch("/api/submit", {
+      body: JSON.stringify({
+        family,
+        guests: guests.guests,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+
+    if (response.ok) {
+      toast({
+        description: "Your response was recorded",
+        duration: 3000,
+        title: "Success!",
+      });
+    } else {
+      toast({
+        description: "There was an issue recording your response",
+        duration: 3000,
+        title: "Error!",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -153,7 +182,16 @@ export default function GuestForm({ guests }: GuestFormProps) {
             </div>
           );
         })}
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? (
+            <>
+              <Loader2 className="animate-spin" />
+              Please wait...
+            </>
+          ) : (
+            "Submit"
+          )}
+        </Button>
       </form>
     </Form>
   );

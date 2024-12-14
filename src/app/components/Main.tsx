@@ -5,6 +5,8 @@ import GuestSelection from "./GuestSelection";
 import { useState } from "react";
 import { Family } from "../interfaces/Family.interface";
 import GuestForm from "./GuestForm";
+import Image from "next/image";
+import party from "@/assets/party.webp";
 
 interface MainProps {
   families: Family[];
@@ -17,20 +19,25 @@ export default function Main({ guests, families }: MainProps) {
 
   const onGuestSelection = (guest: Guest) => {
     const guestFamily = families.find(
-      (family) => family.familyId === guest.familyId
+      (family) => family.id === guest.familyId
     )!;
     setGuestFamily(guestFamily);
 
     const guestFamilyMembers = guests.filter(
-      (guest) => guest.familyId === guestFamily.familyId
+      (guest) => guest.familyId === guestFamily.id
     );
     setGuestFamilyMembers(guestFamilyMembers);
   };
 
   return (
-    <main className="container mx-auto max-w-lg text-center space-y-8 p-4">
+    <main className="container mx-auto max-w-prose text-center space-y-8 p-4">
+      <Image
+        src={party}
+        className="w-full h-full object-cover"
+        alt="Picture of the author"
+      />
       <header className="space-y-2">
-        <h1 className="text-4xl font-bold">Festing with Karen and Rafael!</h1>
+        <h1 className="text-4xl font-bold">Feasting with Karen and Rafael!</h1>
         <p>
           Join us for love, laughter, and delicious bites! RSVP now and save
           your seat at the table.
@@ -42,14 +49,18 @@ export default function Main({ guests, families }: MainProps) {
       </header>
       <section className="space-y-8">
         <GuestSelection guests={guests} onGuestSelection={onGuestSelection} />
-        <h2 className="text-2xl font-semibold">{guestFamily?.familyName}</h2>
-        <p className="italic">
-          Both options come with a delicious Caesar salad, fresh asparagus, and
-          creamy potatoes au gratin to perfectly complement your meal. Enjoy a
-          savory and satisfying dining experience!
-        </p>
+        {guestFamily?.familyName && (
+          <div>
+            <h2 className="text-2xl font-semibold">{guestFamily.familyName}</h2>
+            <p className="italic">
+              Both options come with a delicious Caesar salad, fresh asparagus,
+              and creamy potatoes au gratin to perfectly complement your meal.
+              Enjoy a savory and satisfying dining experience!
+            </p>
+          </div>
+        )}
         {guestFamilyMembers.length > 0 && (
-          <GuestForm guests={guestFamilyMembers} />
+          <GuestForm family={guestFamily} guests={guestFamilyMembers} />
         )}
       </section>
     </main>

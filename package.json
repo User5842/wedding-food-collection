@@ -7,6 +7,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "prisma:update": "prisma migrate dev",
+    "seed:guests": "ts-node /utils/seed.ts",
     "start": "next start",
     "update": "npm-check-updates -u && npm i"
   },
@@ -19,6 +20,7 @@
     "@radix-ui/react-popover": "^1.1.3",
     "@radix-ui/react-radio-group": "^1.2.2",
     "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-toast": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
