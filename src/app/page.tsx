@@ -10,7 +10,9 @@ export default async function Home() {
   // await prisma.guest.deleteMany();
   // await prisma.family.deleteMany();
 
-  const families = (await prisma.family.findMany()) as Family[];
+  const families = (await prisma.family.findMany({
+    include: { guests: true },
+  })) as Family[];
   const guests = (await prisma.guest.findMany({
     where: { family: { responseRecorded: false } },
   })) as Guest[];

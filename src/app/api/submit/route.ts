@@ -3,7 +3,7 @@ import { Guest } from "@/app/interfaces/Guest.interface";
 import prisma from "@/app/lib/db";
 
 interface FamilyResponse {
-  guests: ReadonlyArray<Guest>;
+  guests: Guest[];
   family: Family;
 }
 

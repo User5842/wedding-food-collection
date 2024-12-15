@@ -17,6 +17,11 @@ export default function Main({ guests, families }: MainProps) {
   const [guestFamily, setGuestFamily] = useState<Family | null>(null);
   const [guestFamilyMembers, setGuestFamilyMembers] = useState<Guest[]>([]);
 
+  const onGuestResponseRecorded = () => {
+    setGuestFamily(null);
+    setGuestFamilyMembers([]);
+  };
+
   const onGuestSelection = (guest: Guest) => {
     const guestFamily = families.find(
       (family) => family.id === guest.familyId
@@ -32,6 +37,7 @@ export default function Main({ guests, families }: MainProps) {
   return (
     <main className="container mx-auto max-w-prose text-center space-y-8 p-4">
       <Image
+        priority
         src={party}
         className="w-full h-full object-cover"
         alt="Picture of the author"
@@ -60,7 +66,11 @@ export default function Main({ guests, families }: MainProps) {
           </div>
         )}
         {guestFamilyMembers.length > 0 && (
-          <GuestForm family={guestFamily} guests={guestFamilyMembers} />
+          <GuestForm
+            family={guestFamily!}
+            guests={guestFamilyMembers}
+            onGuestResponseRecorded={onGuestResponseRecorded}
+          />
         )}
       </section>
     </main>
