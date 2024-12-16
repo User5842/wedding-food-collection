@@ -55,19 +55,10 @@ export default function Main({ guests, families }: MainProps) {
       </header>
       <section className="space-y-8">
         <GuestSelection guests={guests} onGuestSelection={onGuestSelection} />
-        {guestFamily?.familyName && (
-          <div>
-            <h2 className="text-2xl font-semibold">{guestFamily.familyName}</h2>
-            <p className="italic">
-              Both options come with a delicious Caesar salad, fresh asparagus,
-              and creamy potatoes au gratin to perfectly complement your meal.
-              Enjoy a savory and satisfying dining experience!
-            </p>
-          </div>
-        )}
         {guestFamilyMembers.length > 0 && (
           <FamilyForm
-            family={guestFamily!}
+            families={families}
+            familyId={guestFamily?.id}
             onGuestResponseRecorded={onGuestResponseRecorded}
           />
         )}

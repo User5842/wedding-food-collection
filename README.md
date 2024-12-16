@@ -12,3 +12,5 @@ Updates:
 2. added toast
 
 all family members in the same family get same value...fix indexing?
+
+do not have array of forms
