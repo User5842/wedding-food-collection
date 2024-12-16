@@ -4,9 +4,9 @@ import { Guest } from "../interfaces/Guest.interface";
 import GuestSelection from "./GuestSelection";
 import { useState } from "react";
 import { Family } from "../interfaces/Family.interface";
-import GuestForm from "./GuestForm";
 import Image from "next/image";
 import party from "@/assets/party.webp";
+import FamilyForm from "./FamilyForm";
 
 interface MainProps {
   families: Family[];
@@ -66,9 +66,8 @@ export default function Main({ guests, families }: MainProps) {
           </div>
         )}
         {guestFamilyMembers.length > 0 && (
-          <GuestForm
+          <FamilyForm
             family={guestFamily!}
-            guests={guestFamilyMembers}
             onGuestResponseRecorded={onGuestResponseRecorded}
           />
         )}

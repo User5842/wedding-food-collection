@@ -12,7 +12,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Guest } from "../interfaces/Guest.interface";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -43,28 +42,19 @@ const guestFoodFormSchema = z.object({
   guests: z.array(guestSchema),
 });
 
-interface GuestFormProps {
-  guests: Guest[];
+interface FamilyFormProps {
   family: Family;
   onGuestResponseRecorded: () => void;
 }
 
-export default function GuestForm({
-  guests,
+export default function FamilyForm({
   family,
   onGuestResponseRecorded,
-}: GuestFormProps) {
+}: FamilyFormProps) {
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof guestFoodFormSchema>>({
-    defaultValues: {
-      guests: guests.map((guest) => ({
-        ...guest,
-        allergies: "",
-        family,
-        foodSelection: "",
-      })),
-    },
+    defaultValues: { ...structuredClone(family) },
     resolver: zodResolver(guestFoodFormSchema),
   });
 
@@ -102,7 +92,7 @@ export default function GuestForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {guests.map((guest) => {
+        {family.guests.map((guest) => {
           const adultGuestFormItems = (
             <>
               <FormItem className="flex items-center space-x-3 space-y-0">
