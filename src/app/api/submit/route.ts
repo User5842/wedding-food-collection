@@ -1,19 +1,13 @@
 import { Family } from "@/app/interfaces/Family.interface";
-import { Guest } from "@/app/interfaces/Guest.interface";
 import prisma from "@/app/lib/db";
-
-interface FamilyResponse {
-  guests: Guest[];
-  family: Family;
-}
 
 export async function POST(request: Request) {
   try {
     const requestJson = await request.json();
-    const { family, guests } = structuredClone(requestJson) as FamilyResponse;
+    const family = structuredClone(requestJson) as Family;
 
-    if (family == null || guests == null || guests.length === 0) {
-      return Response.error();
+    if (family?.guests?.length === 0) {
+      return new Response("Bad Request", { status: 400 });
     }
 
     const familyAlreadyRecordedResponse = await prisma.family.findUnique({
@@ -32,7 +26,7 @@ export async function POST(request: Request) {
     }
 
     const updateResult = await prisma.$transaction(async (prisma) => {
-      const guestUpdates = guests.map((guest) =>
+      const guestUpdates = family.guests.map((guest) =>
         prisma.guest.update({
           where: { id: guest.id },
           data: {
@@ -44,7 +38,7 @@ export async function POST(request: Request) {
       );
 
       const familyUpdate = prisma.family.update({
-        where: { id: guests[0].familyId },
+        where: { id: family.id },
         data: {
           responseRecorded: true,
         },

@@ -14,25 +14,22 @@ interface MainProps {
 }
 
 export default function Main({ guests, families }: MainProps) {
-  const [guestFamily, setGuestFamily] = useState<Family | null>(null);
-  const [guestFamilyMembers, setGuestFamilyMembers] = useState<Guest[]>([]);
+  const [family, setFamily] = useState<Family | null>(null);
 
-  const onGuestResponseRecorded = () => {
-    setGuestFamily(null);
-    setGuestFamilyMembers([]);
-  };
-
-  const onGuestSelection = (guest: Guest) => {
-    const guestFamily = families.find(
-      (family) => family.id === guest.familyId
-    )!;
-    setGuestFamily(guestFamily);
-
-    const guestFamilyMembers = guests.filter(
-      (guest) => guest.familyId === guestFamily.id
+  const familyMap = new Map();
+  for (const family of families) {
+    familyMap.set(
+      family.id,
+      <FamilyForm
+        key={family.id}
+        family={family}
+        onGuestResponseRecorded={() => setFamily(null)}
+      />
     );
-    setGuestFamilyMembers(guestFamilyMembers);
-  };
+  }
+
+  const onGuestSelection = (guest: Guest) =>
+    setFamily(families.find(({ id }) => id === guest.familyId)!);
 
   return (
     <main className="container mx-auto max-w-prose text-center space-y-8 p-4">
@@ -55,13 +52,7 @@ export default function Main({ guests, families }: MainProps) {
       </header>
       <section className="space-y-8">
         <GuestSelection guests={guests} onGuestSelection={onGuestSelection} />
-        {guestFamilyMembers.length > 0 && (
-          <FamilyForm
-            families={families}
-            familyId={guestFamily?.id}
-            onGuestResponseRecorded={onGuestResponseRecorded}
-          />
-        )}
+        {family && familyMap.get(family.id)}
       </section>
     </main>
   );
