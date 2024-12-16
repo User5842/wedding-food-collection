@@ -84,7 +84,6 @@ export default async function Summary() {
                   <TableHead>Food selection</TableHead>
                   <TableHead>Allergies</TableHead>
                   <TableHead>Needs high chair</TableHead>
-                  <TableHead className="text-right">Allergies</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
