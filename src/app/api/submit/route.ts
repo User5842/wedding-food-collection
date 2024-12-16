@@ -24,8 +24,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log(family);
-
     const updateResult = await prisma.$transaction(async (prisma) => {
       const guestUpdates = family.guests.map((guest) =>
         prisma.guest.update({

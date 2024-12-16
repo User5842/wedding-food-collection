@@ -1,16 +1,7 @@
-BEFORE SAVING, REMOVE DATA AND REPLACE WITH DUMMY
+# Wedding Food Collection
 
-allergies
-food selection
+My (soon-to-be) wife and I needed a simple way to collect responses from our guests regarding their food choices. Since she is a PM (product manager) and I am a software engineer, we put our heads together, and I developed the form collection website.
 
-total amount of items per person
-amount of high chairs
+It's a simple solution that exposed me to technologies I have always wanted to explore further, specifically [zod](https://zod.dev/) and [shadcn/ui](https://ui.shadcn.com/).
 
-Updates:
-
-1. only show guests from families who have not recorded a response
-2. added toast
-
-all family members in the same family get same value...fix indexing?
-
-do not have array of forms
+I wasn't originally planning on uploading this. Still, because it ended up being a more-than-trivial-sized project, doing so would serve, if anything, as a portfolio item.
