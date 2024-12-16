@@ -58,13 +58,9 @@ export default function FamilyForm({
     resolver: zodResolver(familySchema),
   });
 
-  console.log("Form validation errors:", form.formState.errors);
-
   const onSubmit = async (family: z.infer<typeof familySchema>) => {
     const response = await fetch("/api/submit", {
-      body: JSON.stringify({
-        family,
-      }),
+      body: JSON.stringify(structuredClone(family)),
       headers: {
         "Content-Type": "application/json",
       },

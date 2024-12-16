@@ -40,27 +40,28 @@ export default function GuestSelection({
           className="justify-between"
         >
           {guest != null
-            ? (() => {
-                const { firstName, lastName } = guests.find(
-                  ({ firstName, lastName }) =>
-                    `${firstName}.${lastName}`.toLowerCase() ===
-                    `${guest.firstName}.${guest.lastName}`.toLowerCase()
-                )!;
-                return `${firstName} ${lastName}`;
-              })()
+            ? `${guest.firstName} ${guest.lastName}`
             : "Select a guest..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0">
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const guest = JSON.parse(value) as Guest;
+            const lowercasedQuery = search.toLowerCase().trim();
+            const fullName =
+              `${guest.firstName} ${guest.lastName}`.toLowerCase();
+            return fullName.includes(lowercasedQuery) ? 1 : 0;
+          }}
+        >
           <CommandInput placeholder="Search guest list..." />
           <CommandList>
             <CommandEmpty>No guest found.</CommandEmpty>
             <CommandGroup>
               {guests.map((guest) => (
                 <CommandItem
-                  key={`${guest.id}.${guest.familyId}`}
+                  key={guest.id}
                   value={JSON.stringify(guest)}
                   onSelect={(currentGuest) => {
                     const parsedGuest = JSON.parse(currentGuest);

@@ -13,17 +13,18 @@ export async function POST(request: Request) {
     const familyAlreadyRecordedResponse = await prisma.family.findUnique({
       where: {
         id: family.id,
-        responseRecorded: true,
       },
     });
 
-    if (familyAlreadyRecordedResponse != null) {
+    if (familyAlreadyRecordedResponse?.responseRecorded) {
       console.error(`Family (${family.id}) already recorded a response.`);
       return new Response(
         `Family (${family.id}) already recorded a response.`,
         { status: 409 }
       );
     }
+
+    console.log(family);
 
     const updateResult = await prisma.$transaction(async (prisma) => {
       const guestUpdates = family.guests.map((guest) =>

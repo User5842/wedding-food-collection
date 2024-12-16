@@ -10,23 +10,10 @@ import FamilyForm from "./FamilyForm";
 
 interface MainProps {
   families: Family[];
-  guests: Guest[];
 }
 
-export default function Main({ guests, families }: MainProps) {
+export default function Main({ families }: MainProps) {
   const [family, setFamily] = useState<Family | null>(null);
-
-  const familyMap = new Map();
-  for (const family of families) {
-    familyMap.set(
-      family.id,
-      <FamilyForm
-        key={family.id}
-        family={family}
-        onGuestResponseRecorded={() => setFamily(null)}
-      />
-    );
-  }
 
   const onGuestSelection = (guest: Guest) =>
     setFamily(families.find(({ id }) => id === guest.familyId)!);
@@ -51,8 +38,17 @@ export default function Main({ guests, families }: MainProps) {
         </p>
       </header>
       <section className="space-y-8">
-        <GuestSelection guests={guests} onGuestSelection={onGuestSelection} />
-        {family && familyMap.get(family.id)}
+        <GuestSelection
+          guests={families.flatMap((family) => family.guests)}
+          onGuestSelection={onGuestSelection}
+        />
+        {family && (
+          <FamilyForm
+            key={family.id}
+            family={family}
+            onGuestResponseRecorded={() => setFamily(null)}
+          />
+        )}
       </section>
     </main>
   );
