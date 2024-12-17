@@ -33,16 +33,16 @@ export default function Main({ families }: MainProps) {
 
   return (
     <main className="container mx-auto max-w-prose text-center space-y-8 p-4">
-      <div className="w-[546px] h-[546px]">
-        {image && (
-          <Image
-            priority
-            src={image}
-            className="w-full h-full object-cover"
-            alt="Picture of the author"
-          />
-        )}
-      </div>
+      {image && (
+        <Image
+          priority
+          height={546}
+          width={546}
+          src={image}
+          className="w-full h-auto object-cover aspect-square"
+          alt="Picture of the author"
+        />
+      )}
       <header className="space-y-2">
         <h1 className="text-4xl font-bold">Feasting with Karen and Rafael!</h1>
         <p>
