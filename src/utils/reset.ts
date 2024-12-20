@@ -8,6 +8,7 @@ async function reset() {
     await prisma.guest.deleteMany();
     await prisma.family.deleteMany();
 
+    await prisma.guest.createMany({ data: guests });
     await prisma.family.createMany({ data: families });
   } catch (error) {
     if (error instanceof Error) {
