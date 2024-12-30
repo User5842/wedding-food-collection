@@ -1,6 +1,8 @@
 import { Family } from "@/app/interfaces/Family.interface";
 import prisma from "@/app/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
     const requestJson = await request.json();
