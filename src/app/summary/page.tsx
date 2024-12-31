@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import {
   Table,
   TableBody,
@@ -7,10 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import prisma from "../lib/db";
+import { Family } from "../interfaces/Family.interface";
 
 export default async function Summary() {
-  const [
+  const baseUrl =
+    process.env.BASE_URL || "https://wedding-food-collection.vercel.app/";
+  const summaryResponse = await fetch(`${baseUrl}/api/summary`);
+  const {
     byomCount,
     cheeseBurgerCount,
     chickenCount,
@@ -18,22 +23,15 @@ export default async function Summary() {
     familiesWithGuests,
     highChairCount,
     steakCount,
-  ] = await Promise.all([
-    prisma.guest.count({ where: { foodSelection: "byom" } }),
-    prisma.guest.count({ where: { foodSelection: "cheeseburger" } }),
-    prisma.guest.count({ where: { foodSelection: "chicken" } }),
-    prisma.guest.count({
-      where: {
-        allergies: {
-          not: null,
-          notIn: [""],
-        },
-      },
-    }),
-    prisma.family.findMany({ include: { guests: true } }),
-    prisma.guest.count({ where: { needsHighChair: true } }),
-    prisma.guest.count({ where: { foodSelection: "steak" } }),
-  ]);
+  } = (await summaryResponse.json()) as {
+    byomCount: number;
+    cheeseBurgerCount: number;
+    chickenCount: number;
+    dietaryRestrictionsCount: number;
+    familiesWithGuests: Family[];
+    highChairCount: number;
+    steakCount: number;
+  };
 
   return (
     <main className="container mx-auto max-w-lg text-center p-4 space-y-16">
