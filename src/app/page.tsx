@@ -1,23 +1,11 @@
-import Main from "./components/Main";
-import prisma from "./lib/db";
-import { Family } from "./interfaces/Family.interface";
+export const dynamic = "force-dynamic";
 
-// import families from "@/data/families.json";
-// import guests from "@/data/guests.json";
+import Main from "./components/Main";
 
 export default async function Home() {
-  // await prisma.family.createMany({ data: families });
-  // await prisma.guest.createMany({ data: guests });
-
-  // await prisma.guest.deleteMany();
-  // await prisma.family.deleteMany();
-
-  const families = (await prisma.family.findMany({
-    include: { guests: true },
-    where: {
-      responseRecorded: false,
-    },
-  })) as Family[];
+  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+  const familiesResponse = await fetch(`${baseUrl}/api/families`);
+  const families = await familiesResponse.json();
 
   return <Main families={families} />;
 }
