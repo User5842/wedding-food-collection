@@ -27,11 +27,8 @@ export default function Main({ families }: MainProps) {
         alt="Picture of the author"
       />
       <header className="space-y-2">
-        <h1 className="text-4xl font-bold">Feasting with Karen and Rafael!</h1>
-        <p>
-          Join us for love, laughter, and delicious bites! RSVP now and save
-          your seat at the table.
-        </p>
+        <h1 className="text-4xl font-bold">Feasting with Karen & Rafael</h1>
+        <p>Join us for love, laughter, and delicious bites!</p>
         <p>
           To begin the food selection process, please find your name in the
           dropdown below.
